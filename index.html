@@ -159,7 +159,7 @@
           <div class="feedback-buttons">
             <button class="btn-secondary" onclick="sendFeedback(true)">👍 Có ích</button>
             <button class="btn-secondary" onclick="sendFeedback(false)">👎 Cần bổ sung</button>
-            <button class="btn-primary" onclick="shareArticle()">🔗 Chia sẻ link</button>
+            <!-- <button class="btn-primary" onclick="shareArticle()">🔗 Chia sẻ link</button> -->
             <button class="btn-danger" id="reader-delete-btn" onclick="deleteCurrentArticle()"
               title="Chỉ Admin mới có thể xóa bài viết này">🗑️ Xóa Bài Viết</button>
           </div>
@@ -180,7 +180,7 @@
         <div class="search-modal-input-wrap">
           <span class="search-modal-icon">🔍</span>
           <input type="text" class="search-modal-input" id="modal-search-input"
-            placeholder="Nhập từ khóa (ví dụ: máy in, cài đặt, lỗi kết nối...)"
+            placeholder="Nhập từ khóa (ví dụ: đơn bán hàng, cài đặt, quản lý kho...)"
             oninput="handleRealtimeSearch(this.value)">
         </div>
         <div class="search-results-list" id="modal-search-results">
