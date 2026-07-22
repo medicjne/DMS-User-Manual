@@ -1,0 +1,67 @@
+[
+  {
+    "id": "guide-001",
+    "title": "Hướng dẫn Cài đặt & Bắt đầu sử dụng Phần mềm SalesPro",
+    "subtitle": "Quy trình từng bước giúp bạn cài đặt, đăng nhập và thiết lập hệ thống ban đầu chỉ trong 5 phút.",
+    "category": "Cài đặt",
+    "software": "SalesPro POS",
+    "readingTime": "4 phút",
+    "updatedAt": "2026-07-20",
+    "views": 1420,
+    "tags": ["Cài đặt", "Khởi tạo", "Tài khoản"],
+    "summary": "Hướng dẫn chi tiết cách tải bộ cài đặt SalesPro, cấu hình tài khoản cửa hàng và cài đặt ban đầu.",
+    "contentHTML": "<p>Chào mừng bạn đến với hệ thống <strong>SalesPro POS</strong>. Bài viết này sẽ hướng dẫn bạn các bước cơ bản nhất để cài đặt và đưa hệ thống vào hoạt động cho cửa hàng của mình.</p><div class='callout callout-note'><span class='callout-icon'>💡</span><div><strong>Lưu ý trước khi cài đặt:</strong> Máy tính của bạn cần chạy hệ điều hành Windows 10 trở lên và có kết nối Internet ổn định.</div></div><h2>Các bước cài đặt phần mềm</h2><div class='step-card'><span class='step-number'>1</span><span class='step-title'>Tải bộ cài đặt chính thức</span><p>Truy cập trang chủ và tải bản cài đặt <code>SalesPro_Setup_v3.4.exe</code> về máy tính của bạn.</p></div><div class='step-card'><span class='step-number'>2</span><span class='step-title'>Chạy file cài đặt với quyền Administrator</span><p>Kích chuột phải vào file <code>.exe</code> đã tải về, chọn <strong>Run as administrator</strong> và bấm <em>Next</em> theo hướng dẫn trên màn hình.</p></div><div class='step-card'><span class='step-number'>3</span><span class='step-title'>Đăng nhập và Kích hoạt Bản quyền</span><p>Sử dụng Mã cửa hàng (Store ID) và Mật khẩu do quản trị viên cung cấp để đăng nhập lần đầu.</p></div><h2>Cấu hình thông tin cửa hàng ban đầu</h2><p>Sau khi đăng nhập thành công, hãy truy cập vào mục <strong>Cài đặt hệ thống > Thông tin cửa hàng</strong> để nhập:</p><ul><li>Tên cửa hàng & Mã số thuế</li><li>Địa chỉ in trên hóa đơn thanh toán</li><li>Số điện thoại hotline hỗ trợ khách hàng</li></ul><div class='code-block'><div class='code-header'><span>Tự động kết nối máy in hóa đơn (Command Prompt)</span><button class='copy-code-btn' onclick='copyCode(this)'>📋 Copy</button></div><pre><code>net use LPT1: \\\\192.168.1.100\\Printer_POS /persistent:yes</code></pre></div><div class='callout callout-tip'><span class='callout-icon'>✅</span><div><strong>Mẹo nhỏ:</strong> Bạn có thể sử dụng file Excel mẫu để tải hàng loạt 500+ sản phẩm lên hệ thống chỉ trong vài giây tại menu <em>Danh mục > Nhập Excel</em>.</div></div>"
+  },
+  {
+    "id": "guide-002",
+    "title": "Hướng dẫn Quản lý Đơn hàng & Xử lý Giao nhận",
+    "subtitle": "Quy trình tạo đơn, duyệt đơn hàng và theo dõi trạng thái vận chuyển theo thời gian thực.",
+    "category": "Đơn hàng",
+    "software": "SalesPro POS",
+    "readingTime": "6 phút",
+    "updatedAt": "2026-07-21",
+    "views": 980,
+    "tags": ["Đơn hàng", "Bán hàng", "Vận chuyển"],
+    "summary": "Hướng dẫn từng bước tạo mới đơn hàng, áp mã giảm giá và gửi thông tin sang đối tác vận chuyển.",
+    "contentHTML": "<p>Để quy trình xử lý đơn hàng diễn ra nhanh chóng, việc nắm rõ thao tác tạo và quản lý đơn hàng là vô cùng quan trọng.</p><h2>1. Tạo Đơn hàng mới tại Màn hình Bán hàng (POS)</h2><p>Phần mềm hỗ trợ quét mã vạch trực tiếp hoặc tìm kiếm sản phẩm theo tên/SKU.</p><div class='step-card'><span class='step-number'>1</span><span class='step-title'>Chọn sản phẩm và số lượng</span><p>Nhập số lượng sản phẩm, chọn chương trình khuyến mãi hoặc chiết khấu áp dụng.</p></div><div class='step-card'><span class='step-number'>2</span><span class='step-title'>Chọn đơn vị vận chuyển & Phương thức thanh toán</span><p>Truy cập <strong>Xác nhận đơn > Vận chuyển</strong>, chọn đối tác giao hàng và in phiếu giao.</p></div><div class='callout callout-warning'><span class='callout-icon'>⚠️</span><div><strong>Cảnh báo:</strong> Đối với các đơn hàng COD, vui lòng kiểm tra kỹ số điện thoại và địa chỉ giao hàng trước khi ấn [Phê duyệt đơn].</div></div>"
+  },
+  {
+    "id": "guide-003",
+    "title": "Quy trình Giám sát & Phê duyệt Đơn hàng / Đề xuất",
+    "subtitle": "Hướng dẫn dành cho Quản lý trong việc phê duyệt yêu cầu chiết khấu, trả hàng và hạn mức tín dụng.",
+    "category": "Giám sát & phê duyệt",
+    "software": "Hệ thống Chung",
+    "readingTime": "5 phút",
+    "updatedAt": "2026-07-22",
+    "views": 2310,
+    "tags": ["Giám sát", "Phê duyệt", "Quản lý"],
+    "summary": "Quy trình phê duyệt các giao dịch đặc biệt và giám sát hoạt động của nhân viên bán hàng.",
+    "contentHTML": "<p>Tính năng Giám sát & Phê duyệt giúp đảm bảo tính minh bạch và bảo mật trong các giao dịch giá trị lớn.</p><h2>1. Phê duyệt Đơn hàng Vượt Hạn mức</h2><p>Khi nhân viên tạo đơn hàng vượt quá hạn mức nợ hoặc chiết khấu vượt mức cho phép, đơn hàng sẽ chuyển sang trạng thái <em>Chờ duyệt</em>.</p><div class='callout callout-tip'><span class='callout-icon'>🛡️</span><div><strong>Cách phê duyệt:</strong> Truy cập <strong>Giám sát & Phê duyệt > Danh sách chờ duyệt</strong>, xem chi tiết lý do đề xuất và nhấn [Đồng ý] hoặc [Từ chối].</div></div><h2>2. Phê duyệt Yêu cầu Trả hàng / Hoàn tiền</h2><p>Mọi giao dịch hoàn trả tiền cho khách hàng đều cần sự xác nhận của Quản lý ca trực thông qua ứng dụng di động hoặc máy tính POS.</p>"
+  },
+  {
+    "id": "guide-004",
+    "title": "Hướng dẫn Khai thác Báo cáo Doanh thu & Tồn kho",
+    "subtitle": "Cách xem báo cáo doanh số real-time, phân tích sản phẩm bán chạy và xuất file báo cáo Excel cho kế toán.",
+    "category": "Báo cáo",
+    "software": "AnalyticsHub",
+    "readingTime": "7 phút",
+    "updatedAt": "2026-07-19",
+    "views": 850,
+    "tags": ["Báo cáo", "Doanh thu", "Excel"],
+    "summary": "Tối ưu hóa quản lý kinh doanh dựa trên dữ liệu báo cáo thống kê trực quan và biểu đồ tăng trưởng.",
+    "contentHTML": "<p>Phần mềm cung cấp hệ thống báo cáo đa chiều giúp chủ cửa hàng nắm bắt tình hình kinh doanh mọi lúc mọi nơi.</p><h2>Xem Báo cáo Doanh thu Theo Ngày / Tuần / Tháng</h2><p>Vào mục <strong>Báo cáo > Doanh số bán hàng</strong>. Bạn có thể lọc theo:</p><ul><li>Khoảng thời gian (Tùy chỉnh ngày bắt đầu & ngày kết thúc)</li><li>Chi nhánh / Cửa hàng áp dụng</li><li>Hình thức thanh toán (Tiền mặt, Chuyển khoản, Thẻ VISA)</li></ul><div class='step-card'><span class='step-number'>1</span><span class='step-title'>Xuất Báo cáo ra File Excel / PDF</span><p>Nhấn vào nút <strong>[Xuất dữ liệu]</strong> ở góc trên bên phải màn hình. Hệ thống sẽ tự động tổng hợp bảng kê chi tiết kèm biểu đồ trực quan.</p></div>"
+  },
+  {
+    "id": "guide-005",
+    "title": "Hướng dẫn Quản lý Kho hàng & Kiểm kê Hàng tồn",
+    "subtitle": "Quy trình nhập xuất kho, kiểm kê định kỳ và điều chuyển hàng hóa giữa các chi nhánh.",
+    "category": "Quản lý kho hàng",
+    "software": "SalesPro POS",
+    "readingTime": "5 phút",
+    "updatedAt": "2026-07-22",
+    "views": 1150,
+    "tags": ["Kho hàng", "Tồn kho", "Kiểm kê"],
+    "summary": "Hướng dẫn tạo phiếu nhập kho, xuất kho, theo dõi số lượng tồn kho theo thời gian thực.",
+    "contentHTML": "<p>Quản lý tồn kho chính xác giúp tránh thất thoát và đảm bảo nguồn cung hàng hóa liên tục.</p><h2>1. Tạo Phiếu Nhập Kho Mới</h2><p>Vào menu <strong>Quản lý kho hàng > Nhập kho</strong>, nhấn <em>[+ Tạo phiếu nhập]</em> và quét mã vạch sản phẩm.</p><div class='step-card'><span class='step-number'>1</span><span class='step-title'>Kiểm tra số lượng thực tế</span><p>Nhập số lượng, đơn giá nhập và nhà cung cấp tương ứng.</p></div><h2>2. Kiểm Kê Định Kỳ</h2><p>Sử dụng tính năng <strong>Kiểm kê kho</strong> để cân bằng số lượng trên phần mềm và hàng thực tế trong kho.</p>"
+  }
+]

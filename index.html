@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hướng dẫn Sử dụng Phần mềm DMS - Documentation & Knowledge Base</title>
+  <meta name="description"
+    content="Trang web tổng hợp tài liệu hướng dẫn sử dụng phần mềm chi tiết, bài viết hướng dẫn từng bước, quy trình cài đặt">
+  <meta name="keywords" content="hướng dẫn phần mềm, phần mềm bán hàng, tài liệu hướng dẫn, FAQ, documentation">
+  <meta name="author" content="Tung DMS">
+
+  <!-- Open Graph / Social Media Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Trung tâm Hướng dẫn Sử dụng Phần mềm">
+  <meta property="og:description"
+    content="Tra cứu bài viết hướng dẫn sử dụng phần mềm, mẹo thao tác nhanh và quy trình xử lý lỗi hiệu quả.">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- Top Reading Progress Indicator -->
+  <div id="reading-progress"></div>
+
+  <!-- Navbar Navigation -->
+  <header class="navbar">
+    <div class="nav-brand" onclick="showGridView()">
+      <div class="nav-brand-icon">📚</div>
+      <span>DMS DREAMBIZ</span>
+    </div>
+
+    <div class="nav-controls">
+      <!-- Search Trigger Button -->
+      <button class="search-trigger-btn" id="search-trigger-btn" onclick="openSearchModal()">
+        <span>🔍 Tìm kiếm bài viết...</span>
+        <span class="kbd-badge">Ctrl K</span>
+      </button>
+
+      <!-- Theme Switcher -->
+      <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()"
+        title="Chuyển đổi giao diện Sáng / Tối">
+        🌙
+      </button>
+
+      <!-- Open Guide Admin / Creator Modal -->
+      <button class="admin-open-btn" onclick="openAdminModal()" title="Đăng / Quản lý bài hướng dẫn">
+        ➕
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero-section">
+    <div class="hero-badge">
+      ⚡ Documentation & Knowledge DMS DREAMBIZ
+    </div>
+    <h1 class="hero-title">
+      Trung tâm Hướng Dẫn <span class="gradient-text">Sử Dụng Phần Mềm</span>
+    </h1>
+    <p class="hero-subtitle">
+      Tra cứu quy trình cài đặt, hướng dẫn từng bước, mẹo tối ưu hiệu suất và danh sách sửa lỗi thường gặp cho mọi ứng
+      dụng.
+    </p>
+
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-val" id="stat-total-guides">4</span>
+        <span class="stat-lbl">Bài Hướng Dẫn</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" id="stat-total-views">5,560+</span>
+        <span class="stat-lbl">Lượt Đọc</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val">100%</span>
+        <span class="stat-lbl">Tiếng Việt Trực Quan</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN GUIDES LISTING VIEW -->
+  <main class="main-container" id="grid-container-view">
+
+    <!-- Category & Software Filters -->
+    <div class="filter-section">
+      <!-- Category Pills -->
+      <div class="category-pills" id="category-pills-container">
+        <button class="pill-btn active" data-category="ALL" onclick="filterByCategory('ALL', this)">Tất cả bài
+          viết</button>
+        <button class="pill-btn" data-category="Đơn hàng" onclick="filterByCategory('Đơn hàng', this)">📦 Đơn
+          hàng</button>
+        <button class="pill-btn" data-category="Quản lý kho hàng"
+          onclick="filterByCategory('Quản lý kho hàng', this)">🏢 Quản lý kho hàng</button>
+        <button class="pill-btn" data-category="Báo cáo" onclick="filterByCategory('Báo cáo', this)">📊 Báo cáo</button>
+        <button class="pill-btn" data-category="Giám sát & phê duyệt"
+          onclick="filterByCategory('Giám sát & phê duyệt', this)">🛡️ Giám sát & phê duyệt</button>
+        <button class="pill-btn" data-category="Cài đặt" onclick="filterByCategory('Cài đặt', this)">⚙️ Cài đặt</button>
+      </div>
+
+      <!-- Software Filter Bar -->
+      <div class="software-filter-bar">
+        <span class="software-filter-label">Ứng dụng:</span>
+        <select class="software-select" id="software-select-filter" onchange="filterBySoftware(this.value)">
+          <option value="ALL">Tất cả phần mềm</option>
+          <!-- Dynamic options populated via JS -->
+        </select>
+      </div>
+    </div>
+
+    <!-- Guides Cards Grid Container -->
+    <div class="guides-grid" id="guides-grid">
+      <!-- Guides cards rendered dynamically via JS -->
+    </div>
+
+  </main>
+
+  <!-- READER DETAIL VIEW PAGE -->
+  <section class="reader-view" id="reader-view">
+    <div class="reader-nav">
+      <button class="back-btn" onclick="showGridView()">
+        ← Quay lại danh sách bài viết
+      </button>
+    </div>
+
+    <div class="reader-layout">
+      <!-- Sticky Sidebar Table of Contents -->
+      <aside class="toc-sidebar">
+        <div class="toc-title">MỤC LỤC BÀI VIẾT</div>
+        <ul class="toc-list" id="toc-list">
+          <!-- Dynamic TOC items -->
+        </ul>
+      </aside>
+
+      <!-- Article Content Container -->
+      <article class="article-container">
+        <div class="article-header">
+          <div class="article-meta">
+            <span class="guide-badge" id="reader-badge">Cài đặt & Khởi đầu</span>
+            <span id="reader-software">💻 SalesPro POS</span>
+            <span id="reader-time">⏱️ 5 phút đọc</span>
+            <span id="reader-date">📅 2026-07-22</span>
+          </div>
+          <h1 class="article-title" id="reader-title">Tiêu đề bài viết hướng dẫn</h1>
+          <p class="article-subtitle" id="reader-subtitle">Mô tả ngắn gọn về bài hướng dẫn này...</p>
+        </div>
+
+        <div class="article-body" id="reader-body">
+          <!-- Article HTML rendered dynamically -->
+        </div>
+
+        <!-- Article Feedback & Interactions -->
+        <div class="article-feedback">
+          <div>
+            <strong>Bài viết này có giúp ích cho bạn không?</strong>
+          </div>
+          <div class="feedback-buttons">
+            <button class="btn-secondary" onclick="sendFeedback(true)">👍 Có ích</button>
+            <button class="btn-secondary" onclick="sendFeedback(false)">👎 Cần bổ sung</button>
+            <button class="btn-primary" onclick="shareArticle()">🔗 Chia sẻ link</button>
+            <button class="btn-danger" id="reader-delete-btn" onclick="deleteCurrentArticle()"
+              title="Chỉ Admin mới có thể xóa bài viết này">🗑️ Xóa Bài Viết</button>
+          </div>
+        </div>
+
+      </article>
+    </div>
+  </section>
+
+  <!-- MODAL 1: SEARCH MODAL (Ctrl + K) -->
+  <div class="modal-backdrop" id="search-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">🔍 Tìm kiếm bài hướng dẫn</h3>
+        <button class="modal-close-btn" onclick="closeSearchModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="search-modal-input-wrap">
+          <span class="search-modal-icon">🔍</span>
+          <input type="text" class="search-modal-input" id="modal-search-input"
+            placeholder="Nhập từ khóa (ví dụ: máy in, cài đặt, lỗi kết nối...)"
+            oninput="handleRealtimeSearch(this.value)">
+        </div>
+        <div class="search-results-list" id="modal-search-results">
+          <!-- Results injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ADMIN AUTH LOGIN MODAL -->
+  <div class="modal-backdrop" id="admin-auth-modal">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔒 Quyền Quản Trị Viên (Admin)</h3>
+        <button class="modal-close-btn" onclick="closeAdminAuthModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <div class="lock-icon-lg">🔑</div>
+        <p style="color: var(--text-muted); margin-bottom: 1.25rem;">
+          Chỉ quản trị viên mới có quyền đăng hoặc chỉnh sửa bài viết hướng dẫn. Vui lòng nhập mật khẩu xác thực:
+        </p>
+        <form onsubmit="handleAdminLogin(event)">
+          <div class="form-group">
+            <input type="password" class="form-input" id="admin-password-input"
+              placeholder="Mật khẩu Admin (Mặc định: admin123)" required autofocus
+              style="text-align: center; font-size: 1.1rem; letter-spacing: 0.1em;">
+          </div>
+          <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem;">
+            🔓 Xác Nhận & Mở Quyền Đăng Bài
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ADMIN GUIDE CREATOR MODAL -->
+  <div class="modal-backdrop" id="admin-modal">
+    <div class="modal-box" style="max-width: 820px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" style="display: flex; align-items: center; gap: 0.5rem;">
+            ✍️ Đăng / Quản lý Bài Hướng Dẫn
+            <span class="admin-status-badge">✅ Đã xác thực Admin</span>
+          </h3>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <button class="btn-secondary" onclick="logoutAdmin()" title="Đăng xuất Admin"
+            style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">🔒 Đăng xuất</button>
+          <button class="modal-close-btn" onclick="closeAdminModal()">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form id="guide-admin-form" onsubmit="handleSaveGuide(event)">
+          <div class="form-group">
+            <label class="form-label">Tiêu đề bài viết hướng dẫn *</label>
+            <input type="text" class="form-input" id="form-title"
+              placeholder="VD: Hướng dẫn kết nối máy quét mã vạch không dây" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mô tả tóm tắt (Subtitle)</label>
+            <input type="text" class="form-input" id="form-subtitle"
+              placeholder="Tóm tắt ngắn gọn 1-2 câu về nội dung bài viết...">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Tên phần mềm áp dụng *</label>
+              <input type="text" class="form-input" id="form-software" placeholder="VD: SalesPro POS" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Danh mục chủ đề *</label>
+              <select class="form-select" id="form-category" required>
+                <option value="Đơn hàng">Đơn hàng</option>
+                <option value="Quản lý kho hàng">Quản lý kho hàng</option>
+                <option value="Báo cáo">Báo cáo</option>
+                <option value="Giám sát & phê duyệt">Giám sát & phê duyệt</option>
+                <option value="Cài đặt">Cài đặt</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Thời gian đọc dự kiến</label>
+              <input type="text" class="form-input" id="form-reading-time" placeholder="VD: 5 phút">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Thẻ Tag (phân cách bằng dấu phẩy)</label>
+              <input type="text" class="form-input" id="form-tags" placeholder="Cài đặt, Mã vạch, Scanner">
+            </div>
+          </div>
+
+          <!-- IMAGE INSERTION TOOLBOX -->
+          <!-- <div class="image-insert-box">
+            <div class="image-insert-title">
+              🖼️ Công cụ Chèn Ảnh Vào Bài Viết (Tải ảnh từ máy hoặc URL)
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="form-label" style="font-size: 0.8rem;">1. Chọn tệp ảnh từ máy tính:</label>
+                <input type="file" id="image-file-input" accept="image/*" class="form-input"
+                  style="padding: 0.4rem; font-size: 0.85rem;" onchange="handleImageFileSelect(event)">
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.8rem;">Hoặc nhập Link Ảnh (URL):</label>
+                <input type="url" id="image-url-input" class="form-input"
+                  placeholder="https://example.com/screenshot.png" style="font-size: 0.85rem;"
+                  oninput="handleImageURLInput(this.value)">
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; align-items: center; margin-top: 0.6rem;">
+              <input type="text" id="image-caption-input" class="form-input"
+                placeholder="Chú thích ảnh (Ví dụ: Màn hình cài đặt bước 1)" style="font-size: 0.85rem; flex: 1;">
+              <button type="button" class="btn-primary" onclick="insertImageToContentTextarea()"
+                style="white-space: nowrap; font-size: 0.8rem;">
+                ➕ Chèn Ảnh Vào Nội Dung
+              </button>
+            </div>
+
+            <img id="image-preview-element" class="image-preview-thumb" alt="Preview ảnh">
+          </div> -->
+
+          <!-- GOOGLE DOCS STYLE WYSIWYG RICH TEXT EDITOR -->
+          <div class="form-group">
+            <label class="form-label">Nội dung chi tiết bài viết (Soạn thảo trực quan kiểu Google Docs) *</label>
+
+            <div class="editor-container">
+              <!-- Toolbar -->
+              <div class="editor-toolbar">
+                <!-- Undo / Redo -->
+                <div class="editor-btn-group">
+                  <button type="button" class="editor-btn" onclick="execCmd('undo')"
+                    title="Hoàn tác (Ctrl+Z)">↩️</button>
+                  <button type="button" class="editor-btn" onclick="execCmd('redo')"
+                    title="Làm lại (Ctrl+Y)">↪️</button>
+                </div>
+
+                <!-- Format Dropdown -->
+                <div class="editor-btn-group">
+                  <select class="editor-select" onchange="execCmd('formatBlock', this.value); this.selectedIndex=0;">
+                    <option value="" selected disabled>Định dạng chữ</option>
+                    <option value="p">Đoạn văn thường</option>
+                    <option value="h2">Tiêu đề 2 (H2)</option>
+                    <option value="h3">Tiêu đề 3 (H3)</option>
+                    <option value="h4">Tiêu đề 4 (H4)</option>
+                    <option value="h5">Tiêu đề 5 (H5)</option>
+                  </select>
+                </div>
+
+
+                <!-- Text Style -->
+                <div class="editor-btn-group">
+                  <button type="button" class="editor-btn" onclick="execCmd('bold')"
+                    title="In đậm (Ctrl+B)"><strong>B</strong></button>
+                  <button type="button" class="editor-btn" onclick="execCmd('italic')"
+                    title="In nghiêng (Ctrl+I)"><em>I</em></button>
+                  <button type="button" class="editor-btn" onclick="execCmd('underline')"
+                    title="Gạch chân (Ctrl+U)"><u>U</u></button>
+                  <button type="button" class="editor-btn" onclick="execCmd('strikeThrough')"
+                    title="Gạch ngang"><s>S</s></button>
+                </div>
+
+                <!-- Lists -->
+                <div class="editor-btn-group">
+                  <button type="button" class="editor-btn" onclick="execCmd('insertUnorderedList')"
+                    title="Danh sách chấm đầu dòng">• List</button>
+                  <button type="button" class="editor-btn" onclick="execCmd('insertOrderedList')"
+                    title="Danh sách đánh số">1. List</button>
+                </div>
+
+                <!-- Preset Components -->
+                <div class="editor-btn-group">
+                  <button type="button" class="editor-btn" onclick="insertCallout('note')"
+                    title="Chèn Hộp Ghi chú (Note)" style="width: auto; padding: 0 0.5rem; font-size: 0.8rem;">💡 Ghi
+                    chú</button>
+                  <button type="button" class="btn-secondary" onclick="insertCallout('tip')"
+                    style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">✅ Mẹo</button>
+                  <button type="button" class="btn-secondary" onclick="insertCallout('warning')"
+                    style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">⚠️ Cảnh báo</button>
+                  <button type="button" class="btn-secondary" onclick="insertStepCard()"
+                    style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">🔢 Thẻ bước</button>
+                  <button type="button" class="btn-secondary" onclick="insertCodeSnippet()"
+                    style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">💻 Khung Code</button>
+                </div>
+
+                <!-- Alignment -->
+                <div class="editor-btn-group">
+                  <button type="button" class="editor-btn" onclick="execCmd('justifyLeft')" title="Căn trái">⬅️</button>
+                  <button type="button" class="editor-btn" onclick="execCmd('justifyCenter')"
+                    title="Căn giữa">↔️</button>
+                  <button type="button" class="editor-btn" onclick="execCmd('justifyRight')"
+                    title="Căn phải">➡️</button>
+                </div>
+
+                <!-- Clear -->
+                <div class="editor-btn-group">
+                  <button type="button" class="editor-btn" onclick="execCmd('removeFormat')"
+                    title="Xóa định dạng">🧹</button>
+                </div>
+              </div>
+
+              <!-- Editable Canvas -->
+              <div id="rich-editor" class="wysiwyg-editor" contenteditable="true"
+                placeholder="Soạn thảo bài viết trực quan tại đây... Nhập văn bản, chọn định dạng In đậm, Tiêu đề hoặc chèn ảnh dễ dàng như Google Docs!">
+              </div>
+            </div>
+          </div>
+
+
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <button type="button" class="btn-secondary" onclick="exportGuidesJSON()">📥 Export Backup JSON</button>
+              <button type="button" class="btn-secondary" onclick="resetToDefaultData()"
+                style="color: var(--brand-danger);">🔄 Restored Mẫu ban đầu</button>
+            </div>
+            <button type="submit" class="btn-primary">💾 Đăng / Lưu Bài Hướng Dẫn</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- JavaScript App Script -->
+  <script src="app.js"></script>
+</body>
+
+</html>
