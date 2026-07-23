@@ -7,6 +7,7 @@ let guidesData = [];
 let activeCategory = 'ALL';
 let activeSoftware = 'ALL';
 let currentGuideId = null;
+let editingGuideId = null; // Track if we're editing an existing guide
 
 // DOM Elements
 const gridContainerView = document.getElementById('grid-container-view');
@@ -177,6 +178,10 @@ function renderGuides() {
     card.className = 'guide-card';
     card.onclick = () => openGuideReader(guide.id);
 
+    const editBtnHTML = isAdminLoggedIn
+      ? `<button class="edit-card-btn" onclick="editGuide('${guide.id}', event)" title="Sửa bài viết này">🖊️ Sửa</button>`
+      : `<button class="edit-card-btn" onclick="editGuide('${guide.id}', event)" title="Yêu cầu quyền Admin để sửa">🔒 Sửa</button>`;
+
     const deleteBtnHTML = isAdminLoggedIn
       ? `<button class="delete-card-btn" onclick="deleteGuide('${guide.id}', event)" title="Xóa bài viết này">🗑️ Xóa</button>`
       : `<button class="delete-card-btn" onclick="deleteGuide('${guide.id}', event)" title="Yêu cầu quyền Admin để xóa">🔒 Xóa</button>`;
@@ -187,6 +192,7 @@ function renderGuides() {
           <span class="guide-badge">${escapeHTML(guide.category)}</span>
           <div style="display: flex; align-items: center; gap: 0.5rem;">
             <span class="guide-software-tag">💻 ${escapeHTML(guide.software)}</span>
+            ${editBtnHTML}
             ${deleteBtnHTML}
           </div>
         </div>
@@ -442,6 +448,10 @@ function openAdminModal() {
   if (!isAdminLoggedIn) {
     openAdminAuthModal();
   } else {
+    // Reset to create mode when opening from navbar
+    if (!editingGuideId) {
+      resetAdminFormToCreateMode();
+    }
     document.getElementById('admin-modal').classList.add('active');
   }
 }
@@ -524,9 +534,88 @@ function deleteCurrentArticle() {
   }
 }
 
+/* ==========================================================================
+   Edit Article Logic (Admin Only)
+   ========================================================================== */
+
+function editGuide(guideId, event) {
+  if (event) event.stopPropagation();
+
+  if (!isAdminLoggedIn) {
+    showToast('🔒 Bạn cần quyền Admin để sửa bài viết này!');
+    openAdminAuthModal();
+    return;
+  }
+
+  const guide = guidesData.find(g => g.id === guideId);
+  if (!guide) return;
+
+  editingGuideId = guideId;
+  populateEditForm(guide);
+  document.getElementById('admin-modal').classList.add('active');
+}
+
+function editCurrentArticle() {
+  if (currentGuideId) {
+    editGuide(currentGuideId, null);
+  }
+}
+
+function populateEditForm(guide) {
+  // Update modal title to indicate editing
+  const modalTitle = document.querySelector('#admin-modal .modal-title');
+  if (modalTitle) {
+    modalTitle.innerHTML = `🖊️ Chỉnh Sửa Bài Viết <span class="admin-status-badge">📝 Đang sửa</span>`;
+  }
+
+  // Update submit button text
+  const submitBtn = document.querySelector('#guide-admin-form button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.innerHTML = '💾 Cập Nhật Bài Viết';
+  }
+
+  // Fill form fields
+  document.getElementById('form-title').value = guide.title || '';
+  document.getElementById('form-subtitle').value = guide.subtitle || '';
+  document.getElementById('form-software').value = guide.software || '';
+  document.getElementById('form-category').value = guide.category || '';
+  document.getElementById('form-reading-time').value = guide.readingTime || '';
+  document.getElementById('form-tags').value = (guide.tags || []).join(', ');
+
+  // Fill rich editor with existing content
+  const editorEl = document.getElementById('rich-editor');
+  if (editorEl) {
+    editorEl.innerHTML = guide.contentHTML || '';
+  }
+}
+
+function resetAdminFormToCreateMode() {
+  editingGuideId = null;
+
+  // Restore modal title
+  const modalTitle = document.querySelector('#admin-modal .modal-title');
+  if (modalTitle) {
+    modalTitle.innerHTML = `✍️ Đăng / Quản lý Bài Hướng Dẫn <span class="admin-status-badge">✅ Đã xác thực Admin</span>`;
+  }
+
+  // Restore submit button text
+  const submitBtn = document.querySelector('#guide-admin-form button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.innerHTML = '💾 Đăng / Lưu Bài Hướng Dẫn';
+  }
+
+  // Clear form
+  document.getElementById('guide-admin-form').reset();
+  const editorEl = document.getElementById('rich-editor');
+  if (editorEl) editorEl.innerHTML = '';
+}
+
 
 function closeAdminModal() {
   document.getElementById('admin-modal').classList.remove('active');
+  // Reset editing state when closing
+  editingGuideId = null;
+  resetAdminFormToCreateMode();
 }
 
 /* Image Upload & Base64 Converter */
@@ -691,33 +780,68 @@ function handleSaveGuide(e) {
 
   const tags = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
 
-  const newGuide = {
-    id: `guide-${Date.now()}`,
-    title,
-    subtitle,
-    category,
-    software,
-    readingTime,
-    updatedAt: new Date().toISOString().split('T')[0],
-    views: 1,
-    tags,
-    summary: subtitle || title,
-    contentHTML
-  };
+  if (editingGuideId) {
+    // === UPDATE MODE ===
+    const guideIndex = guidesData.findIndex(g => g.id === editingGuideId);
+    if (guideIndex === -1) {
+      showToast('❌ Không tìm thấy bài viết để cập nhật!');
+      return;
+    }
 
-  guidesData.unshift(newGuide);
-  saveGuidesToLocal();
-  populateSoftwareFilterOptions();
-  updateStatsCounters();
-  renderGuides();
+    guidesData[guideIndex] = {
+      ...guidesData[guideIndex],
+      title,
+      subtitle,
+      category,
+      software,
+      readingTime,
+      updatedAt: new Date().toISOString().split('T')[0],
+      tags,
+      summary: subtitle || title,
+      contentHTML
+    };
 
-  closeAdminModal();
-  document.getElementById('guide-admin-form').reset();
-  if (editorEl) editorEl.innerHTML = '';
-  showToast('Đã đăng bài hướng dẫn mới! 🚀');
+    saveGuidesToLocal();
+    populateSoftwareFilterOptions();
+    updateStatsCounters();
+    renderGuides();
 
-  // Open the newly created guide immediately
-  openGuideReader(newGuide.id);
+    const updatedId = editingGuideId;
+    closeAdminModal();
+    showToast('✅ Đã cập nhật bài viết thành công!');
+
+    // Refresh reader view if currently viewing this guide
+    if (currentGuideId === updatedId) {
+      openGuideReader(updatedId);
+    }
+  } else {
+    // === CREATE MODE ===
+    const newGuide = {
+      id: `guide-${Date.now()}`,
+      title,
+      subtitle,
+      category,
+      software,
+      readingTime,
+      updatedAt: new Date().toISOString().split('T')[0],
+      views: 1,
+      tags,
+      summary: subtitle || title,
+      contentHTML
+    };
+
+    guidesData.unshift(newGuide);
+    saveGuidesToLocal();
+    populateSoftwareFilterOptions();
+    updateStatsCounters();
+    renderGuides();
+
+    closeAdminModal();
+    showToast('Đã đăng bài hướng dẫn mới! 🚀');
+
+    // Open the newly created guide immediately
+    openGuideReader(newGuide.id);
+  }
 }
 
 

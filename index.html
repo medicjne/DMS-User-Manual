@@ -159,7 +159,8 @@
           <div class="feedback-buttons">
             <button class="btn-secondary" onclick="sendFeedback(true)">👍 Có ích</button>
             <button class="btn-secondary" onclick="sendFeedback(false)">👎 Cần bổ sung</button>
-            <!-- <button class="btn-primary" onclick="shareArticle()">🔗 Chia sẻ link</button> -->
+            <button class="btn-edit" id="reader-edit-btn" onclick="editCurrentArticle()"
+              title="Chỉnh sửa bài viết này">🖊️ Sửa Bài Viết</button>
             <button class="btn-danger" id="reader-delete-btn" onclick="deleteCurrentArticle()"
               title="Chỉ Admin mới có thể xóa bài viết này">🗑️ Xóa Bài Viết</button>
           </div>
