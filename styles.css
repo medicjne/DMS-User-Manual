@@ -1418,3 +1418,57 @@ pre code {
     padding: 1.25rem;
   }
 }
+
+/* ==========================================================================
+   Admin Modal — Full Page Override (chỉ áp dụng riêng cho admin-modal)
+   ========================================================================== */
+
+#admin-modal.modal-backdrop {
+  background: var(--bg-primary);
+  /* bỏ lớp mờ đen, thay bằng nền đặc */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  align-items: flex-start;
+  /* không center theo chiều dọc nữa */
+  padding: 0;
+  overflow-y: auto;
+}
+
+#admin-modal .modal-box {
+  max-width: 900px;
+  /* rộng hơn popup mặc định (680px) */
+  width: 100%;
+  max-height: none;
+  /* bỏ giới hạn 85vh */
+  min-height: 100vh;
+  /* chiếm toàn bộ chiều cao trang */
+  margin: 0 auto;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  transform: none;
+  /* bỏ hiệu ứng trượt lên của popup */
+}
+
+#admin-modal .modal-header {
+  position: sticky;
+  top: 0;
+  background: var(--bg-secondary);
+  z-index: 10;
+  padding: 1.5rem 2rem;
+}
+
+#admin-modal .modal-body {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+
+  #admin-modal .modal-header,
+  #admin-modal .modal-body {
+    padding: 1.25rem 1rem;
+  }
+}
