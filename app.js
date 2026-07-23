@@ -190,7 +190,7 @@ function renderGuides() {
       <div>
         <div class="guide-header">
           <span class="guide-badge">${escapeHTML(guide.category)}</span>
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div class="guide-header-actions">
             <span class="guide-software-tag">💻 ${escapeHTML(guide.software)}</span>
             ${editBtnHTML}
             ${deleteBtnHTML}
@@ -236,6 +236,9 @@ function openGuideReader(guideId) {
 
   const readerBody = document.getElementById('reader-body');
   readerBody.innerHTML = guide.contentHTML;
+
+  // Zoom image
+  attachImageZoomHandlers();
 
   // Generate Sticky Table of Contents
   generateTOC(readerBody);
@@ -433,6 +436,8 @@ function setupKeyboardShortcuts() {
     if (e.key === 'Escape') {
       closeSearchModal();
       closeAdminModal();
+      document.getElementById('lightbox-overlay').classList.remove('active'); // ← zoom ảnh nè
+      document.body.style.overflow = '';
     }
   });
 }
@@ -893,4 +898,31 @@ function escapeHTML(str) {
       '"': '&quot;'
     }[tag] || tag)
   );
+}
+
+/* ==========================================================================
+   Image Lightbox (Zoom ảnh trong bài viết)
+   ========================================================================== */
+
+function openLightbox(imgEl) {
+  const overlay = document.getElementById('lightbox-overlay');
+  const lightboxImg = document.getElementById('lightbox-img');
+  lightboxImg.src = imgEl.src;
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden'; // khóa scroll nền khi xem ảnh
+}
+
+function closeLightbox(event) {
+  // Chỉ đóng khi click đúng vào overlay/nút đóng, không đóng khi click vào chính ảnh
+  if (event && event.target.tagName === 'IMG') return;
+
+  document.getElementById('lightbox-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function attachImageZoomHandlers() {
+  const images = document.querySelectorAll('.article-body img');
+  images.forEach(img => {
+    img.onclick = () => openLightbox(img);
+  });
 }
