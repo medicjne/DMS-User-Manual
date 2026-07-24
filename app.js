@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadGuidesData();
   setupKeyboardShortcuts();
   setupScrollListener();
+  updateAdminUIVisibility();
 });
 
 // Load Guides from JSON or LocalStorage fallback
@@ -233,6 +234,9 @@ function openGuideReader(guideId) {
   document.getElementById('reader-date').textContent = `📅 ${guide.updatedAt}`;
   document.getElementById('reader-title').textContent = guide.title;
   document.getElementById('reader-subtitle').textContent = guide.subtitle || '';
+
+  // Update Edit & Delete Buttons Visibility
+  updateAdminUIVisibility();
 
   const readerBody = document.getElementById('reader-body');
   readerBody.innerHTML = guide.contentHTML;
@@ -485,7 +489,7 @@ function handleAdminLogin(e) {
     closeAdminAuthModal();
     showToast('🔑 Xác thực Admin thành công!');
     renderGuides(); // Re-render guides to update admin delete icons
-
+    updateAdminUIVisibility(); // sửa,xoá theo role Admin
     // Open admin modal if it was triggered
     const adminModal = document.getElementById('admin-modal');
     if (adminModal) adminModal.classList.add('active');
@@ -499,6 +503,7 @@ function logoutAdmin() {
   sessionStorage.removeItem('docs_admin_auth');
   closeAdminModal();
   renderGuides();
+  updateAdminUIVisibility();
   showToast('🔒 Đã đăng xuất quyền Admin');
 }
 
@@ -925,4 +930,16 @@ function attachImageZoomHandlers() {
   images.forEach(img => {
     img.onclick = () => openLightbox(img);
   });
+}
+
+/* ==========================================================================
+   Hiển thị xoá / sửa theo role admin
+   ========================================================================== */
+
+function updateAdminUIVisibility() {
+  const editBtn = document.getElementById('reader-edit-btn');
+  const deleteBtn = document.getElementById('reader-delete-btn');
+
+  if (editBtn) editBtn.style.display = isAdminLoggedIn ? 'inline-flex' : 'none';
+  if (deleteBtn) deleteBtn.style.display = isAdminLoggedIn ? 'inline-flex' : 'none';
 }
