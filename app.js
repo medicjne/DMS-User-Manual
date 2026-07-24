@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupKeyboardShortcuts();
   setupScrollListener();
   updateAdminUIVisibility();
+  setupEditorPasteHandler();
 });
 
 // Load Guides from JSON or LocalStorage fallback
@@ -629,7 +630,10 @@ function closeAdminModal() {
 }
 
 /* Image Upload & Base64 Converter */
-function handleImageFileSelect(event) {
+const CLOUDINARY_CLOUD_NAME = 'cumzywwd';
+const CLOUDINARY_UPLOAD_PRESET = 'docs_hub_unsigned';
+
+async function handleImageFileSelect(event) {
   const file = event.target.files[0];
   if (!file) return;
 
@@ -638,14 +642,33 @@ function handleImageFileSelect(event) {
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    currentImageDataURL = e.target.result;
+  showToast('⏳ Đang tải ảnh lên máy chủ...');
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      { method: 'POST', body: formData }
+    );
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData?.error?.message || 'Upload thất bại');
+    }
+
+    const data = await response.json();
+    currentImageDataURL = data.secure_url;
+
     document.getElementById('image-url-input').value = '';
     showImagePreview(currentImageDataURL);
-    showToast('📷 Đã tải ảnh lên bộ nhớ tạm!');
-  };
-  reader.readAsDataURL(file);
+    showToast('✅ Đã tải ảnh lên máy chủ thành công!');
+  } catch (err) {
+    console.error(err);
+    showToast('❌ Lỗi khi tải ảnh lên: ' + err.message);
+  }
 }
 
 function handleImageURLInput(url) {
@@ -942,4 +965,75 @@ function updateAdminUIVisibility() {
 
   if (editBtn) editBtn.style.display = isAdminLoggedIn ? 'inline-flex' : 'none';
   if (deleteBtn) deleteBtn.style.display = isAdminLoggedIn ? 'inline-flex' : 'none';
+}
+/* ==========================================================================
+   Đẩy ảnh lên cloud
+   ========================================================================== */
+
+
+function setupEditorPasteHandler() {
+  const editor = document.getElementById('rich-editor');
+  if (!editor) return;
+
+  editor.addEventListener('paste', async (e) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+
+    // --- Trường hợp 1: ảnh dạng file nhị phân (chụp màn hình, copy file ảnh) ---
+    for (const item of items) {
+      if (item.type.startsWith('image/')) {
+        e.preventDefault();
+        const file = item.getAsFile();
+        if (file) await uploadAndInsertImage(file);
+        return;
+      }
+    }
+
+    // --- Trường hợp 2: dán từ Google Docs / Word (dạng HTML chứa base64) ---
+    const htmlData = e.clipboardData.getData('text/html');
+    if (htmlData && htmlData.includes('<img')) {
+      const base64Matches = [...htmlData.matchAll(/<img[^>]+src="(data:image\/[^";]+;base64,[^"]+)"/g)];
+
+      if (base64Matches.length > 0) {
+        e.preventDefault();
+        showToast(`⏳ Phát hiện ${base64Matches.length} ảnh từ Google Docs, đang tải lên máy chủ...`);
+
+        for (const match of base64Matches) {
+          const base64Str = match[1];
+          const blob = await (await fetch(base64Str)).blob();
+          const file = new File([blob], 'pasted-image.png', { type: blob.type });
+          await uploadAndInsertImage(file);
+        }
+      }
+      // Nếu ảnh trong Google Docs không phải base64 mà là URL googleusercontent.com,
+      // trường hợp này không xử lý được vì URL đó yêu cầu quyền truy cập riêng của Google.
+    }
+  });
+}
+
+async function uploadAndInsertImage(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      { method: 'POST', body: formData }
+    );
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData?.error?.message || 'Upload thất bại');
+    }
+
+    const data = await response.json();
+    const imageHTML = `<div class="article-img-wrap"><img src="${data.secure_url}" alt="Hình ảnh bài viết" class="article-img"></div><p><br></p>`;
+    insertHTMLToEditor(imageHTML);
+
+    showToast('✅ Đã tải ảnh lên máy chủ thành công!');
+  } catch (err) {
+    console.error(err);
+    showToast('❌ Lỗi khi tải ảnh lên: ' + err.message);
+  }
 }
